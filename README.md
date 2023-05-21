@@ -38,10 +38,9 @@ optional arguments:
 - For example (`wos-seed171-lr5e-05-coarse_alpha-1-shot-1-ratio-1.0-length30070-macro.ckpt`, 
 `wos-seed171-lr5e-05-coarse_alpha-1-shot-1-ratio-1.0-length30070-micro.ckpt`).
 
-**Example:**
+## Run the scripts
 ```shell
 ## Train and test on WOS dataset
-# Put the Data file we upload in its corresponding folder, and then run the following code
 python train.py --device=0 --batch=5 --dataset=wos --shot=1 --seed=171 --constraint_loss=1 --contrastive_loss=1 --contrastive_alpha=0.99 --contrastive_level=1 --use_dropout_sim=1 --contrastive_logits=1
 ```
 

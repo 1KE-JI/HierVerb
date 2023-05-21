@@ -29,13 +29,13 @@ optional arguments:
   --constraint_loss         Hierarchy-aware constraint chain
   --contrastive_loss        flat Hierarchical contrastive loss
   --contrastive_level       \alpha
-  --constraint_alpha        \lambda_1 the weight of HCC
+  --constraint_alpha        \lambda_1 the weight of HCC(default -1)
   --contrastive_alpha       \lambda_2 the weight of FHC
 ```
 
 - Results are in `./result/few_shot_train.txt`.
 - Checkpoints are in `./ckpts/`. Two checkpoints are kept based on macro-F1 and micro-F1 respectively.
-- For example (`wos-seed171-lr5e-05-coarse_alpha-1-shot-1-ratio-1.0-length30070-macro.ckpt`, 
+- For example (`wos-seed550-lr5e-05-coarse_alpha-1-shot-1-ratio-1.0-length30070-macro.ckpt`, 
 `wos-seed171-lr5e-05-coarse_alpha-1-shot-1-ratio-1.0-length30070-micro.ckpt`).
 
 ## Run the scripts

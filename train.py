@@ -1,12 +1,18 @@
+'''
+Author: jike
+Date: 2022-10-08 09:40:03
+LastEditTime: 2022-11-21 15:57:29
+LastEditors: jike
+FilePath: /mnt/jike/paper/nlu/paper/train.py
+'''
+
 import datetime
-
 import logging
-from openprompt.utils.reproduciblity import set_seed
-
 from tqdm import tqdm
 import os
 import torch
 import argparse
+from openprompt.utils.reproduciblity import set_seed
 from openprompt.prompts import SoftVerbalizer, ManualTemplate
 
 from models.model import MultiVerbPromptForClassification

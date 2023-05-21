@@ -69,7 +69,7 @@ optional arguments:
 ## Run the scripts
 ```shell
 ## Train and test on WOS dataset
-python train.py --device=0 --batch=5 --dataset=wos --shot=1 --seed=171 --constraint_loss=1 --contrastive_loss=1 --contrastive_alpha=0.99 --contrastive_level=1 --use_dropout_sim=1 --contrastive_logits=1
+python train.py --device=0 --batch=5 --dataset=wos --shot=1 --seed=550 --constraint_loss=1 --contrastive_loss=1 --contrastive_alpha=0.99 --contrastive_level=1 --use_dropout_sim=1 --contrastive_logits=1
 ```
 
 ### Reproducibility

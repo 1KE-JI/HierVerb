@@ -29,7 +29,7 @@ python preprocess_wos.py
 The original dataset can be acquired """.
 
 ```shell
-cd ./data/DBPeida
+cd ./data/DBPedia
 ```
 Coming soon.
 
@@ -51,8 +51,8 @@ usage: train.py [-h] [--lr LR] [--dataset DATA] [--batch BATCH] [--device DEVICE
                 [--seed SEED]....
 
 optional arguments:
-  --lr                      LR, learning rate for BERT.                   
-  --lr2                     learning rate for verbalizer.
+  --lr                      LR, learning rate for language model.                   
+  --lr2                     LR, learning rate for verbalizer.
   --dataset                 {wos,dbp,rcv1} Dataset.
   --batch BATCH             Batch size
   --shot SHOT               fewshot seeting
@@ -61,8 +61,8 @@ optional arguments:
   --constraint_loss         Hierarchy-aware constraint chain
   --contrastive_loss        flat Hierarchical contrastive loss
   --contrastive_level       \alpha
-  --constraint_alpha        \lambda_1 the weight of HCC(default -1)
-  --contrastive_alpha       \lambda_2 the weight of FHC
+  --constraint_alpha        \lambda_1 the weight of HCC(default -1 )
+  --contrastive_alpha       \lambda_2 the weight of FHC(default 0.99)
 ```
 
 - Results are in `./result/few_shot_train.txt`.

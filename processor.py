@@ -13,7 +13,7 @@ base_path = "./"
 
 class WOSProcessor:
 
-    def __init__(self, ratio=-1, seed=144, is_cover=False, shot=-1, ratio_flag=0, choice=-1):
+    def __init__(self, ratio=-1, seed=171, shot=-1, ratio_flag=0):
         super().__init__()
         self.name = 'WebOfScience'
         label0_list, label1_list, label0_label2id, label1_label2id, label0_to_label1_mapping, label1_to_label0_mapping = get_mapping()
@@ -36,7 +36,7 @@ class WOSProcessor:
 
         self.train_data = self.get_dataset("train")
 
-        self.dev_data = self.get_dataset("dev")
+        self.dev_data = self.get_dataset("val")
         self.test_data = self.get_dataset("test")
         self.train_example = self.convert_data_to_examples(self.train_data)
         self.dev_example = self.convert_data_to_examples(self.dev_data)
@@ -49,7 +49,7 @@ class WOSProcessor:
         self.size = len(self.train_example) + len(self.test_example)
 
     def get_tree_info(self):
-        flat_slot2value = torch.load(os.path.join(self.data_path, 'flat_slot.pt'))
+        flat_slot2value = torch.load(os.path.join(self.data_path, 'slot.pt'))
 
         value2slot = {}
         num_class = 0
@@ -75,16 +75,14 @@ class WOSProcessor:
         depth2label = {i: [a for a in depth_dict if depth_dict[a] == i] for i in range(max_depth)}
         return flat_slot2value, value2slot, depth2label
 
-    def get_dataset(self, type="train", choice=1):
+    def get_dataset(self, type="train"):
         data = []
         cur_dataset = self.dataset[type]
-        length = len(cur_dataset['input_ids'])
-        tokens = cur_dataset["token"]
-        labels = cur_dataset["label"]
+        length = len(cur_dataset)
         for i in tqdm(range(length)):
-            text_a = tokens[i]
-            label = labels[i][choice]
-            data.append([text_a, label - 7])
+            text_a = cur_dataset[i][0]
+            label = cur_dataset[i][1]
+            data.append([text_a, label])
         return data
 
     def convert_data_to_examples(self, data):

@@ -70,6 +70,6 @@ if __name__ == "__main__":
     with open(os.path.join(root_path, "formatted_data", "label1.txt"), 'w', encoding='utf-8') as fp:
         fp.write("\n".join(label1_list))
 
-    write_formatted_data("train")
-    write_formatted_data("val")
-    write_formatted_data("test")
+    # write_formatted_data("train")
+    # write_formatted_data("val")
+    # write_formatted_data("test")

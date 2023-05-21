@@ -87,7 +87,7 @@ def main():
 
     parser.add_argument("--shot", type=int, default=1)
 
-    parser.add_argument("--seed", type=int, default=171)
+    parser.add_argument("--seed", type=int, default=550)
     parser.add_argument("--plm_eval_mode", default=False)
     parser.add_argument("--verbalizer", type=str, default="soft")
 
@@ -141,7 +141,7 @@ def main():
     set_seed(args.seed)
 
     plm, tokenizer, model_config, WrapperClass = load_plm_from_config(args, args.model_name_or_path)
-    # dataseti
+    # dataset
     dataset = {}
     dataset['train'] = processor.train_example
     dataset['dev'] = processor.dev_example

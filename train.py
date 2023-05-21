@@ -12,18 +12,19 @@ from tqdm import tqdm
 import os
 import torch
 import argparse
+import openprompt
 from openprompt.utils.reproduciblity import set_seed
 from openprompt.prompts import SoftVerbalizer, ManualTemplate
 
-from models.model import MultiVerbPromptForClassification
+from models.hierVerb import HierVerbPromptForClassification
 
 from processor import PROCESSOR
 
-from util.utils import evaluate_for_multi_mask, load_plm_from_config
+from util.utils import load_plm_from_config
 from util.data_loader import SinglePathPromptDataLoader
 from transformers import AdamW, get_linear_schedule_with_warmup
 
-import openprompt
+
 import logging
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
@@ -232,9 +233,9 @@ def main():
             verbalizer_list.append(SoftVerbalizer(tokenizer, model=plm, classes=label_list[i]))
 
     print("loading prompt model")
-    prompt_model = MultiVerbPromptForClassification(plm=plm, template=mytemplate, verbalizer_list=verbalizer_list,
-                                                    freeze_plm=False, args=args, processor=processor,
-                                                    plm_eval_mode=args.plm_eval_mode, use_cuda=use_cuda)
+    prompt_model = HierVerbPromptForClassification(plm=plm, template=mytemplate, verbalizer_list=verbalizer_list,
+                                              freeze_plm=args.freeze_plm, args=args, processor=processor,
+                                              plm_eval_mode=args.plm_eval_mode, use_cuda=use_cuda)
 
     if use_cuda:
         prompt_model = prompt_model.cuda()
@@ -254,7 +255,6 @@ def main():
     ]
 
     # Using different optimizer for prompt parameters and model parameters
-
     verbalizer = prompt_model.verbalizer
     optimizer_grouped_parameters2 = [
         {'params': verbalizer.group_parameters_1, "lr": args.lr},
@@ -299,10 +299,8 @@ def main():
         for key in keys:
             best_record[key] = 0
 
-    # torch.autograd.set_detect_anomaly(True)
     ## start training
     for epoch in range(args.max_epochs):
-        # for epoch in range(11):
         print("------------ epoch {} ------------".format(epoch + 1))
         if early_stop_count >= args.early_stop:
             print("Early stop!")
@@ -338,11 +336,11 @@ def main():
 
             idx = idx + 1
             # torch.cuda.empty_cache()
-        print("layer 2 loss, lm loss, layer 1 loss, contras loss are: ")
+        print("multi-verb loss, lm loss, constraint loss, contrastive loss are: ")
         print(loss_detailed)
 
-        scores = evaluate_for_multi_mask(prompt_model, validation_dataloader, processor, desc="Valid",
-                                         mode=args.eval_mode)
+        scores = prompt_model.evaluate(validation_dataloader, processor, desc="Valid",
+                                       mode=args.eval_mode)
         early_stop_count += 1
         if args.eval_full:
             score_str = ""
@@ -379,8 +377,8 @@ def main():
         for k in best_keys:
             prompt_model.load_state_dict(torch.load(f"ckpts/{this_run_unicode}-{k}.ckpt"))
 
-            scores = evaluate_for_multi_mask(prompt_model, test_dataloader, processor, desc="test", mode=args.eval_mode,
-                                             args=args)
+            scores = prompt_model.evaluate(test_dataloader, processor, desc="test", mode=args.eval_mode,
+                                           args=args)
             tmp_str = ''
             tmp_str += f"finally best_{k} "
             for i in keys:
@@ -394,7 +392,7 @@ def main():
         if use_cuda:
             prompt_model = prompt_model.cuda()
 
-        scores = evaluate_for_multi_mask(prompt_model, test_dataloader, processor, desc="test", mode=args.eval_mode)
+        scores = prompt_model.evaluate(test_dataloader, processor, desc="test", mode=args.eval_mode)
         macro_f1_1 = scores['macro_f1']
         micro_f1_1 = scores['micro_f1']
         acc_1 = scores['acc']
@@ -403,7 +401,7 @@ def main():
         # for best micro
         prompt_model.load_state_dict(torch.load(f"ckpts/{this_run_unicode}-micro.ckpt"))
 
-        scores = evaluate_for_multi_mask(prompt_model, test_dataloader, processor, desc="test", mode=args.eval_mode)
+        scores = prompt_model.evaluate(test_dataloader, processor, desc="test", mode=args.eval_mode)
         macro_f1_2 = scores['macro_f1']
         micro_f1_2 = scores['micro_f1']
         acc_2 = scores['acc']
@@ -413,43 +411,8 @@ def main():
     content_write = "=" * 20 + "\n"
     content_write += f"start_time {start_time}" + "\n"
     content_write += f"end_time {datetime.datetime.now()}\t"
-    content_write += f"dataset {args.dataset}\t"
-    content_write += f"temp {args.template_id}\t"
-    content_write += f"seed {args.seed}\t"
-    content_write += f"shot {args.shot}\t"
-    content_write += f"multi_verb {args.multi_verb}\t"
-
-    content_write += f"lr {args.lr}\t"
-    content_write += f"lr2 {args.lr2}\t"
-
-    content_write += f"use_hier_mean {args.use_hier_mean}\t"
-
-    content_write += f"constraint_loss {args.constraint_loss}\t"
-    content_write += f"constraint_alpha {args.constraint_alpha}\t"
-    content_write += f"cs_mode {args.cs_mode}\t"
-    content_write += f"eval_mode {args.eval_mode}\t"
-    content_write += f"contrastive_loss {args.contrastive_loss}\t"
-    content_write += f"use_new_ct {args.use_new_ct}\t"
-
-    content_write += f"contrastive_alpha {args.contrastive_alpha}\t"
-    content_write += f"shuffle {args.shuffle}\t"
-    content_write += f"max_epochs {args.max_epochs}\t"
-
-    content_write += f"imbalanced_weight {args.imbalanced_weight}\t"
-    content_write += f"contrastive_level {args.contrastive_level}\t"
-    content_write += f"use_dropout_sim {args.use_dropout_sim}\t"
-    content_write += f"batch_size {args.batch_size}\t"
-    content_write += f"imbalanced_weight_reverse {args.imbalanced_weight_reverse}\t"
-    content_write += f"lm_training {args.lm_training}\t"
-    content_write += f"lm_alpha {args.lm_alpha}\t"
-    content_write += f"dropout {args.dropout}\t"
-    content_write += f"contrastive_logits {args.contrastive_logits}\t"
-
-    content_write += f"use_withoutWrappedLM {args.use_withoutWrappedLM}\t"
-
-    content_write += f"batch_s {batch_s}\t"
-
-    content_write += f"mean_verbalizer {args.mean_verbalizer}\t"
+    for hyperparam, value in args.__dict__.items():
+        content_write += f"{hyperparam} {value}\t"
     content_write += "\n"
     if args.eval_full:
         cur_keys = ['P_acc']

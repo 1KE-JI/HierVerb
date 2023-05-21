@@ -53,6 +53,7 @@ def main():
     parser.add_argument("--dataset", default="wos", type=str)
     parser.add_argument("--eval_mode", default=0, type=int)
     parser.add_argument("--use_hier_mean", default=1, type=int)
+    parser.add_argument("--freeze_plm", default=0, type=int)
 
     parser.add_argument("--multi_label", default=0, type=int)
     parser.add_argument("--multi_verb", default=1, type=int)
@@ -318,8 +319,8 @@ def main():
             batch = {"input_ids": batch[0], "attention_mask": batch[1],
                      "label": batch[2], "loss_ids": batch[3]}
 
-            logits, loss, loss_detailed = prompt_model(batch)
-
+            logits, loss, cur_loss_detailed = prompt_model(batch)
+            loss_detailed = [loss_detailed[idx] + value for idx, value in enumerate(cur_loss_detailed)]
             loss.backward()
             torch.nn.utils.clip_grad_norm_(prompt_model.parameters(), args.max_grad_norm)
 

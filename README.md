@@ -27,6 +27,10 @@ python preprocess_wos.py
 ### DBPedia
 
 The original dataset can be acquired """.
+
+```shell
+cd ./data/DBPeida
+```
 Coming soon.
 
 

@@ -3,7 +3,7 @@
 
 This is the official repository for the ACL 2023 paper
 [Hierarchical Verbalizer for Few-Shot Hierarchical Text Classification](https://arxiv.org/)
-![DataConstruction](./Image/overview.png)
+![DataConstruction](./image/overview.png)
 ## Requirements
 
 * Python >= 3.6

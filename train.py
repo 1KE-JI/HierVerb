@@ -170,8 +170,6 @@ def main():
             fp.write(text)
     mytemplate = ManualTemplate(tokenizer=tokenizer).from_file(template_path, choice=args.template_id)
 
-    # args.result_file = f"eval_full{args.eval_full}-{args.dataset}-multiVerb{args.multi_verb}-cs{args.constraint_loss}-ct{args.contrastive_loss}-new_ct{args.use_new_ct}.txt"
-
     print_info("train_size: {}".format(len(dataset['train'])))
 
     ## Loading dataset

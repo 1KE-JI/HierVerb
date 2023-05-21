@@ -20,7 +20,7 @@ from models.hierVerb import HierVerbPromptForClassification
 
 from processor import PROCESSOR
 
-from util.utils import load_plm_from_config
+from util.utils import load_plm_from_config, print_info
 from util.data_loader import SinglePathPromptDataLoader
 from transformers import AdamW, get_linear_schedule_with_warmup
 
@@ -120,7 +120,7 @@ def main():
         args.shuffle = True
     else:
         args.shuffle = False
-    print(args)
+    print_info(args)
     processor = PROCESSOR[args.dataset](shot=args.shot, seed=args.seed)
 
     train_data = processor.train_example
@@ -132,9 +132,9 @@ def main():
     hier_mapping = processor.hier_mapping
     args.depth = len(hier_mapping) + 1
 
-    print("final train_data length is: {}".format(len(train_data)))
-    print("final dev_data length is: {}".format(len(dev_data)))
-    print("final test_data length is: {}".format(len(test_data)))
+    print_info("final train_data length is: {}".format(len(train_data)))
+    print_info("final dev_data length is: {}".format(len(dev_data)))
+    print_info("final test_data length is: {}".format(len(test_data)))
 
     args.template_id = 0
 
@@ -171,7 +171,7 @@ def main():
 
     # args.result_file = f"eval_full{args.eval_full}-{args.dataset}-multiVerb{args.multi_verb}-cs{args.constraint_loss}-ct{args.contrastive_loss}-new_ct{args.use_new_ct}.txt"
 
-    print("train_size: {}".format(len(dataset['train'])))
+    print_info("train_size: {}".format(len(dataset['train'])))
 
     ## Loading dataset
     train_dataloader = SinglePathPromptDataLoader(dataset=dataset['train'], template=mytemplate, tokenizer=tokenizer,
@@ -232,7 +232,7 @@ def main():
             # verbalizer_list.append(SoftVerbalizer(tokenizer, plm=plm, classes=label_list[i]))
             verbalizer_list.append(SoftVerbalizer(tokenizer, model=plm, classes=label_list[i]))
 
-    print("loading prompt model")
+    print_info("loading prompt model")
     prompt_model = HierVerbPromptForClassification(plm=plm, template=mytemplate, verbalizer_list=verbalizer_list,
                                               freeze_plm=args.freeze_plm, args=args, processor=processor,
                                               plm_eval_mode=args.plm_eval_mode, use_cuda=use_cuda)
@@ -291,7 +291,7 @@ def main():
     this_run_unicode = f"{args.dataset}-seed{args.seed}-shot{args.shot}-lr{args.lr}-lr2{args.lr2}-batch_size{args.batch_size}-multi_mask{args.multi_mask}-use_new_ct{args.use_new_ct}-cs_mode{args.cs_mode}-ctl{args.contrastive_logits}" \
                        f"-contrastive_alpha{contrastive_alpha}-shuffle{args.shuffle}-constraint_loss{args.constraint_loss}-multi_verb{args.multi_verb}" \
                        f"-contrastive_level{args.contrastive_level}--use_dropout_sim{args.use_dropout_sim}-length{len(dataset['train'])}"
-    print("saved_path: {}".format(this_run_unicode))
+    print_info("saved_path: {}".format(this_run_unicode))
 
     if args.eval_full:
         best_record = dict()
@@ -301,12 +301,12 @@ def main():
 
     ## start training
     for epoch in range(args.max_epochs):
-        print("------------ epoch {} ------------".format(epoch + 1))
+        print_info("------------ epoch {} ------------".format(epoch + 1))
         if early_stop_count >= args.early_stop:
-            print("Early stop!")
+            print_info("Early stop!")
             break
 
-        print(
+        print_info(
             f"cur lr\tscheduler1: {scheduler1.get_lr() if scheduler1 is not None else args.lr}\tscheduler2: {scheduler2.get_lr() if scheduler2 is not None else 1e-4}")
 
         loss_detailed = [0, 0, 0, 0]
@@ -336,8 +336,8 @@ def main():
 
             idx = idx + 1
             # torch.cuda.empty_cache()
-        print("multi-verb loss, lm loss, constraint loss, contrastive loss are: ")
-        print(loss_detailed)
+        print_info("multi-verb loss, lm loss, constraint loss, contrastive loss are: ")
+        print_info(loss_detailed)
 
         scores = prompt_model.evaluate(validation_dataloader, processor, desc="Valid",
                                        mode=args.eval_mode)
@@ -346,7 +346,7 @@ def main():
             score_str = ""
             for key in keys:
                 score_str += f'{key} {scores[key]}\n'
-            print(score_str)
+            print_info(score_str)
             for k in best_record:
                 if scores[k] > best_record[k]:
                     best_record[k] = scores[k]
@@ -356,7 +356,7 @@ def main():
         else:
             macro_f1 = scores['macro_f1']
             micro_f1 = scores['micro_f1']
-            print('macro {} micro {}'.format(macro_f1, micro_f1))
+            print_info('macro {} micro {}'.format(macro_f1, micro_f1))
             if macro_f1 > best_score_macro:
                 best_score_macro = macro_f1
                 torch.save(prompt_model.state_dict(), f"ckpts/{this_run_unicode}-macro.ckpt")
@@ -383,7 +383,7 @@ def main():
             tmp_str += f"finally best_{k} "
             for i in keys:
                 tmp_str += f"{i}: {scores[i]}\t"
-            print(tmp_str)
+            print_info(tmp_str)
 
     else:
         # for best macro
@@ -396,7 +396,7 @@ def main():
         macro_f1_1 = scores['macro_f1']
         micro_f1_1 = scores['micro_f1']
         acc_1 = scores['acc']
-        print('finally best macro {} {} micro {} acc {}'.format(best_score_macro_epoch, macro_f1_1, micro_f1_1, acc_1))
+        print_info('finally best macro {} {} micro {} acc {}'.format(best_score_macro_epoch, macro_f1_1, micro_f1_1, acc_1))
 
         # for best micro
         prompt_model.load_state_dict(torch.load(f"ckpts/{this_run_unicode}-micro.ckpt"))
@@ -405,7 +405,7 @@ def main():
         macro_f1_2 = scores['macro_f1']
         micro_f1_2 = scores['micro_f1']
         acc_2 = scores['acc']
-        print('finally best micro {} {} micro {} acc {}'.format(best_score_micro_epoch, macro_f1_2, micro_f1_2, acc_2))
+        print_info('finally best micro {} {} micro {} acc {}'.format(best_score_micro_epoch, macro_f1_2, micro_f1_2, acc_2))
 
     ## print and record parameter details
     content_write = "=" * 20 + "\n"
@@ -431,7 +431,7 @@ def main():
         content_write += f"acc: {acc_2}\t"
     content_write += "\n\n"
 
-    print(content_write)
+    print_info(content_write)
     if not os.path.exists("result"):
         os.mkdir("result")
     with open(os.path.join("result", args.result_file), "a") as fout:

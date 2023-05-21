@@ -1,15 +1,9 @@
 # -*- coding:utf-8 -*-
-"""
-Python 3.6
-author：jike
-date：2022年06月02日
-"""
-
 import torch
 import numpy as np
 from transformers import __version__ as transformers_version
 import random
-from transformers import BertTokenizer, BertPreTrainedModel, BertForSequenceClassification
+from transformers import BertTokenizer
 
 from transformers import BertConfig, BertForMaskedLM
 from openprompt.plms.mlm import MLMTokenizerWrapper

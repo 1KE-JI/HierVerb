@@ -76,7 +76,7 @@ optional arguments:
 python train.py --device=0 --batch=5 --dataset=wos --shot=1 --seed=550 --constraint_loss=1 --contrastive_loss=1 --contrastive_alpha=0.99 --contrastive_level=1 --use_dropout_sim=1 --contrastive_logits=1
 ```
 
-### Reproducibility
+## Reproducibility
 
 We experiment on one Tesla V100-SXM2-32GB with CUDA version $10.2$. We use a batch size of $5$ to fully tap one GPU.
 

@@ -2,7 +2,7 @@
 # Hierarchical Verbalizer for Few-Shot Hierarchical Text Classification
 
 This is the official repository for the ACL 2023 paper
-[Hierarchical Verbalizer for Few-Shot Hierarchical Text Classification](https://arxiv.org/)
+[Hierarchical Verbalizer for Few-Shot Hierarchical Text Classification](https://arxiv.org/pdf/2305.16885.pdf)
 ![DataConstruction](./image/overview.png)
 ## Requirements
 

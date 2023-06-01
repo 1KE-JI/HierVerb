@@ -254,7 +254,7 @@ def main():
     ]
 
     # Using different optimizer for prompt parameters and model parameters
-    # use args.lr2 to accelerate the optimization of verbalizer0
+    # use a learning rate of 1e−4 to fasten the convergence of its hierarchical label words’ embeddings of verbalizer0
     verbalizer = prompt_model.verbalizer
     optimizer_grouped_parameters2 = [
         {'params': verbalizer.group_parameters_1, "lr": args.lr},

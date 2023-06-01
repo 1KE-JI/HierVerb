@@ -262,7 +262,6 @@ def main():
     ]
 
     optimizer1 = AdamW(optimizer_grouped_parameters1, lr=args.lr)
-
     optimizer2 = AdamW(optimizer_grouped_parameters2)
 
     tot_step = len(train_dataloader) // args.gradient_accumulation_steps * args.max_epochs

@@ -81,3 +81,9 @@ python train.py --device=0 --batch=5 --dataset=wos --shot=1 --seed=550 --constra
 We experiment on one Tesla V100-SXM2-32GB with CUDA version $10.2$. We use a batch size of $5$ to fully tap one GPU.
 
 ## Citation
+@article{ji2023hierarchical,
+  title={Hierarchical Verbalizer for Few-Shot Hierarchical Text Classification},
+  author={Ji, Ke and Lian, Yixin and Gao, Jingsheng and Wang, Baoyuan},
+  journal={arXiv preprint arXiv:2305.16885},
+  year={2023}
+}

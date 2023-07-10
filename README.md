@@ -83,10 +83,19 @@ We experiment on one Tesla V100-SXM2-32GB with CUDA version $10.2$. We use a bat
 ## Citation
 If you found this repository is helpful, please cite our paper:
 ```
-@article{ji2023hierarchical,
-  title={Hierarchical Verbalizer for Few-Shot Hierarchical Text Classification},
-  author={Ji, Ke and Lian, Yixin and Gao, Jingsheng and Wang, Baoyuan},
-  journal={arXiv preprint arXiv:2305.16885},
-  year={2023}
+@inproceedings{ji-etal-2023-hierarchical,
+    title = "Hierarchical Verbalizer for Few-Shot Hierarchical Text Classification",
+    author = "Ji, Ke  and
+      Lian, Yixin  and
+      Gao, Jingsheng  and
+      Wang, Baoyuan",
+    booktitle = "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2023",
+    address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.acl-long.164",
+    pages = "2918--2933",
+    abstract = "Due to the complex label hierarchy and intensive labeling cost in practice, the hierarchical text classification (HTC) suffers a poor performance especially when low-resource or few-shot settings are considered. Recently, there is a growing trend of applying prompts on pre-trained language models (PLMs), which has exhibited effectiveness in the few-shot flat text classification tasks. However, limited work has studied the paradigm of prompt-based learning in the HTC problem when the training data is extremely scarce. In this work, we define a path-based few-shot setting and establish a strict path-based evaluation metric to further explore few-shot HTC tasks. To address the issue, we propose the hierarchical verbalizer ({``}HierVerb{''}), a multi-verbalizer framework treating HTC as a single- or multi-label classification problem at multiple layers and learning vectors as verbalizers constrained by hierarchical structure and hierarchical contrastive learning. In this manner, HierVerb fuses label hierarchy knowledge into verbalizers and remarkably outperforms those who inject hierarchy through graph encoders, maximizing the benefits of PLMs. Extensive experiments on three popular HTC datasets under the few-shot settings demonstrate that prompt with HierVerb significantly boosts the HTC performance, meanwhile indicating an elegant way to bridge the gap between the large pre-trained model and downstream hierarchical classification tasks.",
 }
 ```

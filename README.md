@@ -20,7 +20,7 @@ Please download the original dataset and then use these scripts.
 
 The original dataset can be acquired in [the repository of HDLTex](https://github.com/kk7nc/HDLTex). Preprocess code could refer to [the repository of HiAGM](https://github.com/Alibaba-NLP/HiAGM) and we provide a copy of preprocess code here. For convenience, here is the WOS dataset [Google Drive](https://drive.google.com/file/d/1UuVDd3uEVVFcuy6i-LdZUo6SHJSMQ1-b/view?usp=share_link) after preprocessing.
 ```shell
-cd ./data/WebOfScience
+cd ./dataset/WebOfScience
 python preprocess_wos.py
 ```
 
@@ -28,7 +28,7 @@ python preprocess_wos.py
 
 The original dataset wiki_data.csv can be acquired [Google Drive](https://drive.google.com/file/d/1UuVDd3uEVVFcuy6i-LdZUo6SHJSMQ1-b/view?usp=share_link).
 ```shell
-mv wiki_data.csv ./data/DBPedia
+mv wiki_data.csv ./dataset/DBPedia
 ```
 
 ### RCV1-V2
@@ -36,7 +36,7 @@ mv wiki_data.csv ./data/DBPedia
 The preprocess code could refer to the [repository of reuters_loader](https://github.com/ductri/reuters_loader) and we provide a copy here. The original dataset can be acquired [here](https://trec.nist.gov/data/reuters/reuters.html) by signing an agreement.
 
 ```shell
-cd ./data/rcv1
+cd ./dataset/rcv1
 python preprocess_rcv1.py
 python data_rcv1.py
 ```

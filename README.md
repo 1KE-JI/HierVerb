@@ -26,13 +26,10 @@ python preprocess_wos.py
 
 ### DBPedia
 
-The original dataset can be acquired """.
-
+The original dataset wiki_data.csv can be acquired [Google Drive](https://drive.google.com/file/d/1UuVDd3uEVVFcuy6i-LdZUo6SHJSMQ1-b/view?usp=share_link).
 ```shell
 cd ./data/DBPedia
 ```
-Coming soon.
-
 
 ### RCV1-V2
 

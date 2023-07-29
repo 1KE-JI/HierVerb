@@ -1,0 +1,9 @@
+Event
+SportsSeason
+Work
+TopicalConcept
+Species
+Place
+Agent
+Device
+UnitOfWork

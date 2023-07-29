@@ -19,7 +19,8 @@ data_path = os.path.join(base_path, "WebOfScience")
 
 low_res_path = os.path.join(data_path, "low-res")
 few_shot_path = os.path.join(base_path, "few-shot", "WebOfScience")
-
+if not os.path.exists(few_shot_path):
+    os.mkdir(few_shot_path)
 
 label1 = [line.strip() for line in open(os.path.join(data_path, "formatted_data", "label1.txt")).readlines()]
 

@@ -28,7 +28,7 @@ python preprocess_wos.py
 
 The original dataset wiki_data.csv can be acquired [Google Drive](https://drive.google.com/file/d/1UuVDd3uEVVFcuy6i-LdZUo6SHJSMQ1-b/view?usp=share_link).
 ```shell
-cd ./data/DBPedia
+mv wiki_data.csv ./data/DBPedia
 ```
 
 ### RCV1-V2
